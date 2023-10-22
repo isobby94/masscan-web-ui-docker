@@ -1,0 +1,44 @@
+version: '3.7'
+
+networks:
+  default:
+    name: masscan
+    external: true
+
+services:
+
+  # NGINX
+  nginx:
+    build:
+      context: ./src
+      dockerfile: Dockerfile-Ubuntu-Nginx
+    container_name: masscan-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./app:/var/www/html  
+    restart: always
+
+  # PHP-FPM
+  fpm:
+    build:
+      context: ./src
+      dockerfile: Dockerfile-PHP-FPM
+    container_name: masscan-fpm
+    working_dir: /var/www/html
+    volumes:
+      - ./app:/var/www/html
+    restart: always
+
+  # MySQL
+  mysql:
+    image: mariadb:10.5.10
+    container_name: masscan-mysql
+    environment:
+      MARIADB_ROOT_PASSWORD: toor
+      MARIADB_DATABASE: masscan
+      MARIADB_USER: masscan
+      MARIADB_PASSWORD: changem3
+    volumes:
+      - ./src/db-structure-mysql.sql:/docker-entrypoint-initdb.d/db-structure-mysql.sql
+    restart: always
