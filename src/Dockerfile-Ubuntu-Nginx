@@ -10,11 +10,11 @@ FROM ubuntu:20.04
 LABEL author="Sobir Akbarov <akbarovsobir94@yandex.com>"
 
 # Update the repository
-RUN apt-get update
+RUN apt update
 
 # Install necessary tools
 ARG DEBIAN_FRONTEND=noninteractive
-RUN apt-get install apt-utils dialog iproute2 dnsutils inetutils-ping ncat masscan nano less wget nginx -y
+RUN apt install apt-utils dialog iproute2 dnsutils inetutils-ping ncat masscan nano less wget nginx -y
 
 # Remove the default NGINX configuration file
 RUN rm -v /etc/nginx/nginx.conf
